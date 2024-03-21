@@ -1,0 +1,117 @@
+Ballon Burst Notes (leet code 452) "Minimum Number of Arrows to Burst Ballons"
+
+Step 1:
+sortBalloonByEnd
+
+The function modifies the input vector directly (in-place) and does not return a new value or vector.
+Sorting is based on the end points to simplify solving the problem.
+The technique of sorting intervals or ranges based on specific criteria (in this case, end points) is a strategic approach to simplify and efficiently solve problems involving intervals, ranges, or sequences.
+
+This approach is particularly effective for problems where you have to deal with overlapping intervals and you're looking for an optimal way to cover all intervals with the minimum number of points (in this case, arrows).
+
+in the balloon bursting problem, sorting by end points allows you to minimize the number of arrows needed by ensuring you always aim for the earliest possible end point that can burst the maximum number of balloons. It's a versatile approach that can be applied to a wide range of scenarios where data is best understood and manipulated in a sorted order. (tldr; use greedy algo to sort ballons by end points we are setting upthe problem so that each step(each arrow shot is the best local decision) allowing you to burst the most balloons with 1 single arrow.)
+
+Step 2:
+int arrowPos:
+
+variable initialization:
+a variable that we use to track the position where the current arrow is shot. Initializing it to the end point of the first ballon for a stratigic choice, followed by the greedy approach
+
+Accessing Vector Elements:
+point[0] accesses the first element (the first balloon) in the sorted vector points. Since points is a paired vector, each element is a pair representing a balloon's start and end points.
+
+
+Accessing Pair Elements:
+std::pair<int, int> is the first element and can be accessed using .first, and the second element (the end point) can be accessed using .second. So Points[0].second will give us the end point of the first balloon,
+
+
+Why the endpoint?:
+
+Shooting an arrow at thend point of the first balloon makes sure that we can burst the maximum number of balloons with one arrow starting with the first balloon. If a balloon starts before or at this endpoint and ends after or at this endpoint, it will be burst by the arrow short at arrowPoS. This is good insight on how greedy method is being applied
+
+Greedy Approach Insight:
+By choosing to shoot at the end point of the first balloon, you make an optimal choice that contributes to overall goal of minimizing the number of arrows.
+
+(tldr; choosing the first point is the most optmal choice, and is proof the algorithm is working.)
+
+
+Step 3:
+int arrowCount:
+
+Count Initialization:
+arrowCount is used to keep track of the total number of arrows needed. Initializing it to 1 accounts for the first arrow shot at the end point of the first balloon.
+
+Significance of Initialization:
+The reason we start with 1 instead of 0 is that we made a commitment by planning to show the first arrow based on the sorted list of balloons.It represents my first step in taking action based on our sorted data.
+
+Role in greedy algorithm:
+Each step in a greedy alo builds towards an optimal solution, with each arrow shot representing a step.The initailization of arrowCount to 1 is consistent with greedy approach which seeks tominize the total resources (arrows) used.
+
+Foundation for iteration:
+This step sets the foundation for the subsequent logic, where we will iterate through the sorted balloons to determine if additional arrows are needed based on weather subsequent balloons overlap with current arrowPos. If a balloon does not overlap, it means a new arrow is required, which will be reflected in an increase in arrow count.
+(tldr; by starting the arrowCount to 1 we have effectivly set up our initial condition under which the rest of the algo will operate.)
+
+
+
+Step 4:
+Implmenting For each balloon in points, starting from second:
+
+If balloons start point <= arrowPos, continue: Means the current arrow can also burst this balloon since its start point is within the range of current arrow's position. Which will loop and continue to the next balloon.
+
+Iteration throught balloons:
+The loop starts from the second balloon because the first balloon's end point was used to determine the initial arrowPos and it is covered by the first arrow.
+
+Checking for Overlap:
+By comparing the start point of the current balloon (points[i].first) with arrowPos, we determine if the current balloon overlaps with the area covered by the arrow positioned at arrowPos.
+
+Updating Arrow Count and Position:
+if there's no overlap, it means the current arrow cannot burst the balloon, so we increment arrowCount and update arrowPos to make sure the next arrow covers as much as possble, starting from the current balloon's end point.
+
+Greedy Choice Continuation:
+Each decision to use a new arrow is made based on the current situation (non-overlapping balloons), showing the greedy algo approach's characteristic of making locally optimal choices aiming for a blobally optimal solution(minimizing the nimber of arrows).
+
+(tldr; This step is crucial, it directly applies the greedy method to dynamically adjust the solution based on the sorted intervals(balloons) and their overlaps, minimizing the number of arrows required to burst all balloons.)
+
+
+
+Step 5:
+
+Test functions
+
+
+
+
+
+Time complexity:
+findMinArrowShots has a time complexity of O(NlogN) due to sorting operations, and is the longest part of the operation, and thus that is the timecomplexity of the operation itself.
+
+
+
+
+
+Future planned iterations of various problems i will solve:
+
+Different Cost for Each Balloon:
+Imagine each balloon has a different cost associated with bursting it, and the goal is to minimize the total cost instead of the number of arrows. You'd need to adapt your solution to account for these costs, possibly by prioritizing balloons based on their cost-effectiveness for each arrow shot.
+
+Limited Number of Arrows:
+If there's a constraint on the maximum number of arrows you can use, the problem becomes a matter of selecting the most optimal balloons to burst within this limit. This might involve a more complex greedy approach or even dynamic programming to maximize the number of balloons burst.
+
+Balloon Clusters:
+Consider if balloons were grouped into clusters and shooting any balloon in a cluster bursts the entire cluster. This variation would require a modification to how you assess overlaps and make decisions on where to shoot.
+
+Moving Balloons:
+If balloons move over time, determining where to shoot becomes a dynamic problem that might involve tracking balloon movements and predicting optimal shooting moments.
+
+
+
+
+
+Real-World Apps:
+
+Scheduling - like booking meetings in the fewest number of rooms, or scheduling classes in shared spaces, to help minimize resource allocation while accommodating all events
+
+
+Resource Allocation - If something like drones, or inspection teams must cover multiple areas with overlapping zones, the algo can optimize how resources are deployed to cover all areas with minimal duplication of effort..
+
+Ad palcement - In advertizing espeically digital, there's a need to place ads in time slots or locations with overlapping audiences. Using a similar approach can help minimize costs by selecting optimal slots that cover the target audience with the least amount of redundancy.
